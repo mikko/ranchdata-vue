@@ -41,17 +41,10 @@ export default {
     };
   },
   created() {
-    const credentials = {
-      username: 'firstUser',
-      password: 'somepassword',
-    };
-    this.$http.post(`${document.location.origin}/api/v1/login`, credentials)
-      .then(() => {
-        this.$http.get(`${document.location.origin}/api/v1/sensors`)
-          .then((sensorResponse) => {
-            console.log(sensorResponse.body);
-            this.sensors = sensorResponse.body;
-          });
+    this.$http.get(`${document.location.origin}/api/v1/sensors`)
+      .then((sensorResponse) => {
+        console.log(sensorResponse.body);
+        this.sensors = sensorResponse.body;
       });
   },
 };

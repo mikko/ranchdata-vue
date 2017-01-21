@@ -1,6 +1,7 @@
 <template>
   <div class="header-bar">
     <h1>Suinulan Ranch</h1>
+    <a href="/api/v1/logout">Logout</a>
   </div>
 </template>
 

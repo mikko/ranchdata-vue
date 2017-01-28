@@ -32,7 +32,6 @@ export default {
   },
   methods: {
     submit() {
-      this.message = `Logging in ${this.username} ${this.password}`;
       const credentials = {
         username: this.username,
         password: this.password,

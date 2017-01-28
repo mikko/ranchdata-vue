@@ -1,5 +1,5 @@
 <template>
-  <div :style="position" class="sensor">
+  <div :style="position" class="sensor" v-on:mousedown="onMouseDown">
     <div class="sensor-name">{{ name }}</div>
     {{ value }}&nbsp;{{ unit }}
   </div>
@@ -7,12 +7,13 @@
 
 <script>
 export default {
-  name: 'hello',
+  name: 'sensor',
   props: {
     index: {
       type: Number,
       required: true,
     },
+
     unit: {
       type: String,
       required: true,
@@ -31,19 +32,33 @@ export default {
       value: 666,
     };
   },
+  methods: {
+    onMouseDown() {
+      alert('ASD');
+    },
+  },
   computed: {
+    value() {
+      return this.$store.state.sensors[this.name].latestValue;
+    },
     position() {
-      return `left: 200px; top: ${100 + (this.index * 100)}px;`;
+      // const even = this.index % 2 === 0;
+      const left = ((Math.floor(this.index / 3)) % 6) * 200; // even ? 200 : 400;
+      const top = (this.index % 3) * 200;
+      return `left: ${left}px; top: ${top}px;`;
     },
   },
   created() {
+    /*
     const updateValue = () => {
       this.$http.get(`${document.location.origin}/api/v1/measurements/latest/${this.id}`)
         .then((measurementResponse) => {
           this.value = measurementResponse.body.value;
         });
     };
-    setInterval(updateValue, 1000);
+    updateValue();
+    */
+    // setInterval(updateValue, 1000);
   },
 };
 </script>
@@ -56,6 +71,6 @@ export default {
   border-radius: 8px;
   padding: 5px;
   background-color: gray;
-  font-size: 30px;
+  font-size: 20px;
 }
 </style>

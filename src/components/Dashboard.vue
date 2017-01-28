@@ -1,7 +1,6 @@
 <template>
   <div class="dashboard">
     <div class="blueprint">
-      <!--
       <svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
         <g style="display:inline" id="layer2">
           <path
@@ -70,22 +69,24 @@
             style="fill:none;fill-rule:evenodd;stroke:darkgray;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none" />
         </g>
       </svg>
-      -->
+
     </div>
     <Sensor v-for="(sensor, index) in sensors"
       :index="index"
       :unit="sensor.unit"
-      :name="sensor.serial"
+      :name="sensor.name"
       :id="sensor.id">
     </Sensor>
   </div>
 </template>
 
 <script>
+
+import { mapGetters } from 'vuex';
 import Sensor from './Sensor';
 
 export default {
-  name: 'hello',
+  name: 'dashboard',
   components: {
     Sensor,
   },
@@ -94,6 +95,11 @@ export default {
       type: Array,
       default: () => [],
     },
+  },
+  computed: {
+    ...mapGetters({
+      sensors: 'sensors',
+    }),
   },
 };
 </script>

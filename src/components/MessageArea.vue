@@ -1,28 +1,56 @@
 <template>
   <div class="messagearea">
-    <table>
-      <tr style="background-color: red;">
-        AUTOTALLI LÄMPÖTILA 4 astetta!
-      </tr>
-      <tr>
-        27.12 Roska-auto <button>OK</button>
-      </tr>
-      <tr>
-        28.12 Ilmanvaihtokoneen suodatin (edellinen 20.8.2016)
-      </tr>
-      <tr>
-        2.2 Nuohous (edellinen 20.8.2016)
-      </tr>
-      <tr>
-        1.6 Ruohonleikkuu (edellinen 20.8.2016)
-      </tr>
-    </table>
+    <div class="addentry">
+      <div class="col datepicker">
+        <DatePicker v-model="newEntryDate" type="date" placeholder="Päivämäärä" :picker-options="pickerOptions"></DatePicker>
+      </div>
+      <div class="col input">
+        <elInput v-model="newEntryMessage" placeholder="Merkintä"></elInput>
+      </div>
+      <div class="col button">
+        <elButton>Lisää</elButton>
+      </div>
+    </div>
+    <div class="messagelist">
+      <Message v-for="message in messages"
+               :time="message.time"
+               :message="message.entry"
+               :type="message.type"></Message>
+    </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import { DatePicker, Input, Button } from 'element-ui';
+import lang from 'element-ui/lib/locale/lang/fi';
+import locale from 'element-ui/lib/locale';
+import Message from './Message';
+
+locale.use(lang);
+
 export default {
-  name: 'hello',
+  name: 'messageArea',
+  components: {
+    DatePicker,
+    elInput: Input,
+    elButton: Button,
+    Message,
+  },
+  data() {
+    return {
+      pickerOptions: {
+        firstDayOfWeek: 1,
+      },
+      newEntryDate: '',
+      newEntryMessage: '',
+    };
+  },
+  computed: {
+    ...mapGetters({
+      messages: 'allMessages',
+    }),
+  },
 };
 </script>
 
@@ -31,5 +59,26 @@ export default {
 .messagearea {
   height: 100%;
   outline: solid 1px white;
+}
+.messagelist {
+  display: flex;
+  flex-direction: column;
+}
+.addentry {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 20px;
+}
+.col {
+
+}
+.datepicker {
+  flex: 1;
+}
+.input {
+  flex: 3;
+}
+.button {
+  flex: 1;
 }
 </style>

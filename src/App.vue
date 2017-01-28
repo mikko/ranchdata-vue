@@ -41,11 +41,7 @@ export default {
     };
   },
   created() {
-    this.$http.get(`${document.location.origin}/api/v1/sensors`)
-      .then((sensorResponse) => {
-        console.log(sensorResponse.body);
-        this.sensors = sensorResponse.body;
-      });
+    this.$store.dispatch('initialize');
   },
 };
 </script>
@@ -78,6 +74,7 @@ html, body {
 }
 .header {
   flex: 1;
+  min-height: 100px;
 }
 .column-sidebar {
   flex: 1;

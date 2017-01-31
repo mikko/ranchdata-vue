@@ -26,14 +26,7 @@ const routes = [
 const router = new VueRouter({
   routes,
 });
-/*
-// This is no place for this
-this.$http.get(`${document.location.origin}/api/v1/sensors`)
-  .then((sensorResponse) => {
-    console.log(sensorResponse.body);
-    // this.sensors = sensorResponse.body;
-  });
-*/
+
 /* eslint-disable no-new */
 new Vue({
   router,

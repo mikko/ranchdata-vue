@@ -1,5 +1,6 @@
 <template>
   <div class="dashboard">
+    <!--
     <div class="blueprint">
       <svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
         <g style="display:inline" id="layer2">
@@ -71,6 +72,8 @@
       </svg>
 
     </div>
+    -->
+    <Blueprint></Blueprint>
     <Sensor v-for="(sensor, index) in sensors"
       :index="index"
       :unit="sensor.unit"
@@ -83,12 +86,14 @@
 <script>
 
 import { mapGetters } from 'vuex';
+import Blueprint from './Blueprint';
 import Sensor from './Sensor';
 
 export default {
   name: 'dashboard',
   components: {
     Sensor,
+    Blueprint,
   },
   props: {
     sensors: {

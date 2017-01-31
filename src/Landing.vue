@@ -1,6 +1,7 @@
 <template>
   <div id="landing">
-    <h1>RANCHDATA</h1>
+    <h1>KOTIKEPULI</h1>
+    <h1>( ͝° ͜ʖ͡°)</h1>
     <div class="loginform">
       <h2>
         Please login

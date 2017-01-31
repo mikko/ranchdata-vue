@@ -39,7 +39,7 @@ export default {
   },
   computed: {
     value() {
-      return this.$store.state.sensors[this.name].latestValue;
+      return this.$store.state.sensors[this.id].latestValue;
     },
     position() {
       // const even = this.index % 2 === 0;

@@ -1,47 +1,27 @@
+import Vue from 'vue';
 import * as types from './mutation-types';
 
-const latency = 200;
+// const latency = 200;
 
-export const initialize = ({ commit }) => {
-  const sensors = {
-    mockSensor1: {
-      name: 'mockSensor1',
-      unit: 'kg',
-      latestValue: 1,
-      id: 0,
-    },
-    mockSensor2: {
-      name: 'mockSensor2',
-      unit: 'kg',
-      latestValue: 22,
-      id: 0,
-    },
-    mockSensor3: {
-      name: 'mockSensor3',
-      unit: 'kg',
-      latestValue: 333,
-      id: 0,
-    },
-    mockSensor4: {
-      name: 'mockSensor4',
-      unit: 'kg',
-      latestValue: 4444,
-      id: 0,
-    },
-  };
-
-  Object.keys(sensors).forEach((sensorName, index) => {
-    console.log(index);
-    setTimeout(() => commit(types.ADD_SENSOR, { sensor: sensors[sensorName] }), latency * index);
-  });
+export const initialize = ({ commit, getters }) => {
+  Vue.http.get(`${document.location.origin}/api/v1/sensors`)
+    .then((sensorResponse) => {
+      console.log(sensorResponse.body);
+      const sensors = sensorResponse.body;
+      sensors.forEach(sensor => commit(types.ADD_SENSOR, { sensor }));
+    });
 
   setInterval(() => {
-    const sensorCount = Object.keys(sensors).length;
-    const randomSensor = sensors[Object.keys(sensors)[Math.floor(Math.random() * sensorCount)]];
-    commit(types.UPDATE_SENSOR_LATEST_VALUE,
-      { sensorName: randomSensor.name,
-        latestValue: (Math.random() * 100).toFixed(1),
-      });
+    getters.sensors.forEach((sensor) => {
+      Vue.http.get(`${document.location.origin}/api/v1/measurements/latest/${sensor.id}`)
+        .then((measurementResponse) => {
+          const value = measurementResponse.body.value;
+          commit(types.UPDATE_SENSOR_LATEST_VALUE,
+            { sensorId: sensor.id,
+              latestValue: value,
+            });
+        });
+    });
   }, 1000);
 };
 

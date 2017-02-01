@@ -6,4 +6,7 @@ export const weatherForecastItems = state => state.weatherForecastItems;
 
 export const allMessages = state => state.messages;
 
+// Blueprint
 export const blueprintEditMode = state => state.blueprint.editMode;
+export const exteriorWalls = state => state.blueprint.data.exteriorWalls;
+export const interiorWalls = state => state.blueprint.data.interiorWalls;

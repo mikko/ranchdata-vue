@@ -67,6 +67,10 @@ const state = {
   ],
   blueprint: {
     editMode: false,
+    data: {
+      exteriorWalls: [],
+      interiorWalls: [],
+    },
   },
 };
 

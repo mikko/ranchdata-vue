@@ -1,5 +1,5 @@
 <template>
-  <div :style="position" class="sensor" v-on:mousedown="onMouseDown">
+  <div v-on:drag="onDrag" :style="position" class="sensor">
     <div class="sensor-name">{{ name }}</div>
     {{ value }}&nbsp;{{ unit }}
   </div>
@@ -29,23 +29,33 @@ export default {
   },
   data() {
     return {
-      value: 666,
+      xCoord: 200,
+      yCoord: 200,
     };
   },
   methods: {
-    onMouseDown() {
-      alert('ASD');
+    onDrag(e) {
+      if (e.clientX === 0) {
+        return;
+      }
+      this.xCoord = e.clientX;
+      this.yCoord = e.clientY;
+      console.log(e.clientX, e.clientY);
     },
   },
   computed: {
     value() {
-      return this.$store.state.sensors[this.id].latestValue;
+      const newValue = this.$store.state.sensors[this.id].latestValue;
+      return newValue === undefined ? '' : newValue.toFixed(2);
+    },
+    xCoord() {
+      return ((Math.floor(this.index / 3)) % 6) * 200;
+    },
+    yCoord() {
+      return ((this.index % 3) * 200) + 100;
     },
     position() {
-      // const even = this.index % 2 === 0;
-      const left = ((Math.floor(this.index / 3)) % 6) * 200; // even ? 200 : 400;
-      const top = (this.index % 3) * 200;
-      return `left: ${left}px; top: ${top}px;`;
+      return `left: ${this.xCoord}px; top: ${this.yCoord}px;`;
     },
   },
   created() {
@@ -68,9 +78,11 @@ export default {
 .sensor {
   position: absolute;
   border: solid 1px;
-  border-radius: 8px;
-  padding: 5px;
+  border-radius: 4px;
+  padding: 2px;
   background-color: gray;
-  font-size: 20px;
+  font-size: 15px;
+  user-select: none;
+  cursor: default;
 }
 </style>

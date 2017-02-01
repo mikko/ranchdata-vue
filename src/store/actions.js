@@ -8,7 +8,13 @@ export const initialize = ({ commit, getters }) => {
     .then((sensorResponse) => {
       console.log(sensorResponse.body);
       const sensors = sensorResponse.body;
-      sensors.forEach(sensor => commit(types.ADD_SENSOR, { sensor }));
+      sensors.forEach((sensor) => {
+        const newSensor = sensor;
+        if (sensor.name === '') {
+          newSensor.name = sensor.serial;
+        }
+        commit(types.ADD_SENSOR, { sensor: newSensor });
+      });
     });
 
   setInterval(() => {

@@ -11,4 +11,8 @@ export default {
     set(state.sensors[sensorId], 'latestValue', latestValue);
   },
 
+  [types.TOGGLE_BLUEPRINT_EDIT_MODE](state, { newValue }) {
+    set(state.blueprint, 'editMode', newValue);
+  },
+
 };

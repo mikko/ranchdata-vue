@@ -1,20 +1,20 @@
 <template>
   <div class="tool-wrapper">
     <button :disabled="!ready" v-on:click="save">Save</button>
-    <svg class="canvas">
+    <svg class="canvas" ref="canvas">
       <g class="walls">
         <path class="exteriorWall" :d="exteriorWallsPath"></path>
         <path class="interiorWall" :d="interiorWallsPath"></path>
-        <path class="wallPreview" :d="previewPath"></path>
       </g>
-      <g class="guides" :visibility="guideVisibility" >
+      <g class="guides" v-if="guideVisibility" >
+        <path class="wallPreview" :d="previewPath"></path>
         <path :d="xGuidePath" class="guideline"></path>
         <path :d="yGuidePath" class="guideline"></path>
         <circle class="guidePoint" :cx="nextCoord[0]" :cy="nextCoord[1]" r="10"></circle>
         <circle class="guidePoint" v-if="currentInteriorWall.length > 0" :cx="currentInteriorWall[0][0]" :cy="currentInteriorWall[0][1]" r="10"></circle>
         <rect class="measurementRect" :x="point.x - 50" :y="point.y - 30" width="100" height="30" v-for="point in wallMeasurements"></rect>
         <text :x="point.x - 20" :y="point.y - 10" v-for="point in wallMeasurements">{{ point.value }}</text>
-        <circle v-if="!ready" class="exteriorBeginGuide" :cx="exteriorBeginGuide.x" :cy="exteriorBeginGuide.y" r="10"></circle>
+        <circle v-on:click="endExteriorWalls" v-if="!ready" class="exteriorBeginGuide" :cx="exteriorBeginGuide.x" :cy="exteriorBeginGuide.y" r="10"></circle>
       </g>
     </svg>
     {{ instructionMessage }}
@@ -23,7 +23,9 @@
 
 <script>
 import * as d3 from 'd3';
+import { mapGetters } from 'vuex';
 import util from '../util/blueprintUtil';
+import * as MutationTypes from '../store/mutation-types';
 
 const drawModes = {
   OUTSIDEWALLS: 'outsidewalls', // Drawing the closed loop of walls
@@ -31,7 +33,17 @@ const drawModes = {
   INSIDEWALLS2: 'insidewalls2', // Selecting interior wall end
 };
 
-const initDraw = (vueThis) => {
+const disableEditHandlers = () => {
+  console.log('disableEditHandlers');
+  d3.select('svg')
+    .on('click', null)
+    .on('mousemove', null);
+  d3.select('.exteriorBeginGuide')
+    .on('click', null);
+};
+
+const enableEditHandlers = (vueThis) => {
+  console.log('enableEditHandlers');
   const vue = vueThis;
 
   vue.drawMode = drawModes.OUTSIDEWALLS;
@@ -60,6 +72,7 @@ const initDraw = (vueThis) => {
 
   d3.select('.exteriorBeginGuide')
     .on('click', () => {
+      console.log('Outside walls ready');
       const lastWallpoint = vue.exteriorWallpoints.pop(); // [vue.exteriorWallpoints.length - 1];
       // Compensate last point for 90 degree angle
       const alignedLastPoint = util.alignPoint(lastWallpoint, vue.exteriorWallpoints[0]);
@@ -76,7 +89,8 @@ export default {
   name: 'blueprint',
   data() {
     return {
-      editMode: true,
+      canvasWidth: 0,
+      canvasHeight: 0,
       ready: false,
       exteriorWallpoints: [],
       interiorWalls: [],
@@ -87,9 +101,13 @@ export default {
       currentInteriorWallOrigin: [],
       distanceFactor: 0.025,
       snapDistance: 50,
+      guideVisibility: false,
     };
   },
   computed: {
+    ...mapGetters({
+      editMode: 'blueprintEditMode',
+    }),
     // Path created for drawing an exterior wall through all the coordinates
     exteriorWallsPath() {
       return util.coordToLine(this.exteriorWallpoints);
@@ -146,13 +164,13 @@ export default {
       if (this.nextCoord.length === 0) {
         return util.coordToLine([]);
       }
-      return util.coordToLine([[0, this.nextCoord[1]], [1200, this.nextCoord[1]]]);
+      return util.coordToLine([[0, this.nextCoord[1]], [this.canvasWidth, this.nextCoord[1]]]);
     },
     yGuidePath() {
       if (this.nextCoord.length === 0) {
         return util.coordToLine([]);
       }
-      return util.coordToLine([[this.nextCoord[0], 0], [this.nextCoord[0], 800]]);
+      return util.coordToLine([[this.nextCoord[0], 0], [this.nextCoord[0], this.canvasHeight]]);
     },
     // Circle in the beginning of exterior walls. It's also used for ending the exterior wall
     exteriorBeginGuide() {
@@ -164,10 +182,6 @@ export default {
         x: startPoint[0],
         y: startPoint[1],
       };
-    },
-    // Visibility state for the drawing aids
-    guideVisibility() {
-      return this.editMode ? 'visible' : 'hidden';
     },
     // Calculated values and guide positions for wall lenghts
     wallMeasurements() {
@@ -271,14 +285,40 @@ export default {
       return nearestLine;
     },
   },
+  watch: {
+    editMode: function watchEditMode() {
+      if (this.editMode) {
+        this.guideVisibility = true;
+        enableEditHandlers(this);
+      } else {
+        this.guideVisibility = false;
+        disableEditHandlers(this);
+      }
+      console.log('Watch triggered', this.editMode);
+    },
+  },
   methods: {
     save() {
       this.editMode = false;
       this.instructionMessage = 'It\'s gone.';
+      this.$store.commit(MutationTypes.TOGGLE_BLUEPRINT_EDIT_MODE, { newValue: false });
+    },
+    endExteriorWalls(e) {
+      console.log('Outside walls ready');
+      const lastWallpoint = this.exteriorWallpoints.pop(); // [this.exteriorWallpoints.length - 1];
+      // Compensate last point for 90 degree angle
+      const alignedLastPoint = util.alignPoint(lastWallpoint, this.exteriorWallpoints[0]);
+      this.exteriorWallpoints.push(alignedLastPoint);
+      this.exteriorWallpoints.push(this.exteriorWallpoints[0]);
+      this.drawMode = drawModes.INSIDEWALLS1;
+      this.ready = true;
+      this.instructionMessage = 'Now start drawing an interior wall by selecting a point. Or you can save if ready';
+      e.stopPropagation(); // Prevent bubbling to svg and adding another point of external wall
     },
   },
   mounted() {
-    initDraw(this);
+    this.canvasWidth = this.$refs.canvas.clientWidth;
+    this.canvasHeight = this.$refs.canvas.clientHeight;
   },
 };
 </script>

@@ -65,6 +65,9 @@ const state = {
       weathersymbol3: 63,
     },
   ],
+  blueprint: {
+    editMode: false,
+  },
 };
 
 export default new Vuex.Store({

@@ -5,3 +5,5 @@ export const latestValue = state => state.sensors.map(s => s.latestValue);
 export const weatherForecastItems = state => state.weatherForecastItems;
 
 export const allMessages = state => state.messages;
+
+export const blueprintEditMode = state => state.blueprint.editMode;

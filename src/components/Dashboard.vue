@@ -73,8 +73,9 @@
 
     </div>
     -->
+    <button v-on:click="blueprintEditClicked">Edit blueprint</button>
     <Blueprint></Blueprint>
-    <Sensor v-for="(sensor, index) in sensors"
+    <Sensor v-show="!blueprintEditMode" v-for="(sensor, index) in sensors"
       :index="index"
       :unit="sensor.unit"
       :name="sensor.name"
@@ -86,8 +87,10 @@
 <script>
 
 import { mapGetters } from 'vuex';
+
 import Blueprint from './Blueprint';
 import Sensor from './Sensor';
+import * as MutationTypes from '../store/mutation-types';
 
 export default {
   name: 'dashboard',
@@ -102,9 +105,15 @@ export default {
     },
   },
   computed: {
-    ...mapGetters({
-      sensors: 'sensors',
-    }),
+    ...mapGetters([
+      'sensors',
+      'blueprintEditMode',
+    ]),
+  },
+  methods: {
+    blueprintEditClicked() {
+      this.$store.commit(MutationTypes.TOGGLE_BLUEPRINT_EDIT_MODE, { newValue: true });
+    },
   },
 };
 </script>

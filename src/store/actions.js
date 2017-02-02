@@ -6,7 +6,6 @@ import * as types from './mutation-types';
 export const initialize = ({ commit, getters }) => {
   Vue.http.get(`${document.location.origin}/api/v1/sensors`)
     .then((sensorResponse) => {
-      console.log(sensorResponse.body);
       const sensors = sensorResponse.body;
       sensors.forEach((sensor) => {
         const newSensor = sensor;
@@ -31,7 +30,10 @@ export const initialize = ({ commit, getters }) => {
   }, 1000);
 };
 
-export const otherAction = () => {
+export const syncBlueprint = () => {
 
 };
 
+export const saveBlueprint = () => {
+
+};

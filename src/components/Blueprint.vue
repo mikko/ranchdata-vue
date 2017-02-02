@@ -38,7 +38,6 @@ const drawModes = {
 };
 
 const disableEditHandlers = () => {
-  console.log('disableEditHandlers');
   d3.select('svg')
     .on('click', null)
     .on('mousemove', null);
@@ -47,7 +46,6 @@ const disableEditHandlers = () => {
 };
 
 const enableEditHandlers = (vueThis) => {
-  console.log('enableEditHandlers');
   const vue = vueThis;
 
   vue.drawMode = drawModes.OUTSIDEWALLS;
@@ -63,10 +61,6 @@ const enableEditHandlers = (vueThis) => {
           vue.currentExteriorWallCoord = vue.nextCoord;
           vue.exteriorWallpoints.push([prevCoord, vue.nextCoord]);
         }
-        /*
-        this.$store.commit(MutationTypes.BLUEPRINT_ADD_EXTERIOR_WALL,
-          { wall: this.exteriorWallpoints });
-        */
       } else if (vue.drawMode === drawModes.INSIDEWALLS1) {
         vue.instructionMessage = 'Now select the end for the interior wall';
         vue.currentInteriorWall = [vue.nextCoord];
@@ -306,7 +300,6 @@ export default {
         this.guideVisibility = false;
         disableEditHandlers(this);
       }
-      console.log('Watch triggered', this.editMode);
     },
   },
   methods: {
@@ -322,16 +315,12 @@ export default {
       // this.exteriorWallpoints.push(alignedLastPoint);
       this.exteriorWallpoints.push([alignedLastPoint, this.exteriorWallpoints[0][0]]);
 
-      console.log('Outside walls ready', this.exteriorWallpoints);
-
-
       this.drawMode = drawModes.INSIDEWALLS1;
       this.ready = true;
       this.instructionMessage = 'Now start drawing an interior wall by selecting a point. Or you can save if ready';
       e.stopPropagation(); // Prevent bubbling to svg and adding another point of external wall
     },
     clearInteriorWalls() {
-      console.log('Clearing interior walls');
     },
   },
   mounted() {

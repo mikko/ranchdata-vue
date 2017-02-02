@@ -40,7 +40,6 @@ export default {
       }
       this.xCoord = e.clientX;
       this.yCoord = e.clientY;
-      console.log(e.clientX, e.clientY);
     },
   },
   computed: {

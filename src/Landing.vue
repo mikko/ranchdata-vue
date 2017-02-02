@@ -38,8 +38,7 @@ export default {
         password: this.password,
       };
       this.$http.post(`${document.location.origin}/api/v1/login`, credentials)
-        .then((res) => {
-          console.log(res);
+        .then(() => {
           this.$router.replace('/app');
         })
         .catch(() => {
@@ -48,10 +47,8 @@ export default {
     },
   },
   created() {
-    console.log('Landing page created');
     this.$http.get(`${document.location.origin}/api/v1/userDetails`)
       .then((res) => {
-        console.log(res.body.username);
         if (res.body.username !== undefined) {
           this.$router.replace('/app');
         }

@@ -28,10 +28,27 @@ export const initialize = ({ commit, getters }) => {
         });
     });
   }, 1000);
+
+  Vue.http.get(`${document.location.origin}/api/v1/views`)
+    .then((viewsResponse) => {
+      const view = viewsResponse.body;
+      console.log(view);
+      if (view !== undefined &&
+        view.viewdata !== undefined &&
+        view.viewdata.exteriorWalls !== undefined &&
+        view.viewdata.interiorWalls !== undefined) {
+        const blueprintData = view.viewdata;
+        commit(types.BLUEPRINT_SET_DATA, { blueprintData });
+      }
+    });
 };
 
-export const syncBlueprint = () => {
-
+export const syncBlueprint = ({ getters }) => {
+  const currentBlueprint = getters.blueprint;
+  Vue.http.post(`${document.location.origin}/api/v1/view`, {
+    title: 'todo',
+    viewData: currentBlueprint,
+  });
 };
 
 export const saveBlueprint = () => {

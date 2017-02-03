@@ -73,7 +73,7 @@
 
     </div>
     -->
-    <button v-on:click="blueprintEditClicked">Edit blueprint</button>
+    <button v-on:click="blueprintEditClicked">Redraw blueprint</button>
     <Blueprint></Blueprint>
     <Sensor v-show="!blueprintEditMode" v-for="(sensor, index) in sensors"
       :index="index"

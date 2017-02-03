@@ -1,14 +1,13 @@
 <template>
   <div class="tool-wrapper">
     <button :disabled="!ready" v-on:click="save">Save</button>
+    <button v-on:click="cancel">Cancel</button>
     <button :disabled="interiorWalls.length < 1" v-on:click="clearInteriorWalls">Clear interior walls</button>
 
-    <svg class="canvas" ref="canvas">
+    <svg class="canvas" ref="canvas" v-on:click="canvasClicked">
       <g class="walls">
         <path class="exteriorWall" :d="exteriorWallsPath"></path>
-        <path style="fill:none; stroke: pink; stroke-width: 4px;" :d="storedExteriorWallsPath"></path>
         <path class="interiorWall" :d="interiorWallsPath"></path>
-        <path style="fill:none; stroke: pink; stroke-width: 1px;" :d="storedInteriorWallsPath"></path>
       </g>
       <g class="guides" v-if="guideVisibility" >
         <path class="wallPreview" :d="previewPath"></path>
@@ -39,10 +38,7 @@ const drawModes = {
 
 const disableEditHandlers = () => {
   d3.select('svg')
-    .on('click', null)
     .on('mousemove', null);
-  d3.select('.exteriorBeginGuide')
-    .on('click', null);
 };
 
 const enableEditHandlers = (vueThis) => {
@@ -50,30 +46,8 @@ const enableEditHandlers = (vueThis) => {
 
   vue.drawMode = drawModes.OUTSIDEWALLS;
 
+  // This is bound dynamically with d3 because the d3.mouse helper
   d3.select('svg')
-    .on('click', () => {
-      if (vue.drawMode === drawModes.OUTSIDEWALLS) {
-        vue.instructionMessage = 'Now keep drawing the wall. Connect to first corner when ready';
-        const prevCoord = vue.currentExteriorWallCoord;
-        if (prevCoord == null) {
-          vue.currentExteriorWallCoord = vue.nextCoord;
-        } else {
-          vue.currentExteriorWallCoord = vue.nextCoord;
-          vue.exteriorWallpoints.push([prevCoord, vue.nextCoord]);
-        }
-      } else if (vue.drawMode === drawModes.INSIDEWALLS1) {
-        vue.instructionMessage = 'Now select the end for the interior wall';
-        vue.currentInteriorWall = [vue.nextCoord];
-        vue.currentInteriorWallOrigin = vue.nearestWall.line;
-        vue.drawMode = drawModes.INSIDEWALLS2;
-      } else if (vue.drawMode === drawModes.INSIDEWALLS2) {
-        vue.instructionMessage = 'Add an interior wall by selecting a point or press save';
-        vue.currentInteriorWall[1] = vue.nextCoord;
-        vue.interiorWalls.push(vue.currentInteriorWall);
-        vue.currentInteriorWall = [];
-        vue.drawMode = drawModes.INSIDEWALLS1;
-      }
-    })
     .on('mousemove', function boundMouseover() {
       vue.hoverCoord = d3.mouse(this);
     });
@@ -86,7 +60,7 @@ export default {
       canvasWidth: 0,
       canvasHeight: 0,
       ready: false,
-      exteriorWallpoints: [],
+      exteriorWalls: [],
       currentExteriorWallCoord: null,
       interiorWalls: [],
       hoverCoord: [0, 0],
@@ -97,17 +71,18 @@ export default {
       distanceFactor: 0.025,
       snapDistance: 50,
       guideVisibility: false,
+      previousBlueprintData: {},
     };
   },
   computed: {
-    ...mapGetters({
-      editMode: 'blueprintEditMode',
-      exteriorWalls: 'exteriorWalls',
-      storedInteriorWalls: 'exteriorWalls',
-    }),
+    ...mapGetters([
+      'blueprintEditMode',
+      'exteriorWalls',
+      'interiorWalls',
+    ]),
     // Path created for drawing an exterior wall through all the coordinates
     exteriorWallsPath() {
-      return util.coordPairsToLine(this.exteriorWallpoints);
+      return util.coordPairsToLine(this.exteriorWalls);
     },
     // Path drawing all the interior walls
     interiorWallsPath() {
@@ -177,10 +152,10 @@ export default {
     },
     // Circle in the beginning of exterior walls. It's also used for ending the exterior wall
     exteriorBeginGuide() {
-      if (this.exteriorWallpoints.length === 0) {
+      if (this.exteriorWalls.length === 0) {
         return { x: -100, y: -100 };
       }
-      const startPoint = this.exteriorWallpoints[0][0];
+      const startPoint = this.exteriorWalls[0][0];
       return {
         x: startPoint[0],
         y: startPoint[1],
@@ -188,7 +163,7 @@ export default {
     },
     // Calculated values and guide positions for wall lenghts
     wallMeasurements() {
-      const measurementPoints = this.exteriorWallpoints.map((wall) => {
+      const measurementPoints = this.exteriorWalls.map((wall) => {
         const prevPoint = wall[0];
         const xDiff = prevPoint[0] + wall[1][0];
         const yDiff = prevPoint[1] + wall[1][1];
@@ -204,10 +179,12 @@ export default {
         };
       })
       .filter(point => point !== null);
-      if (this.editMode && this.nextCoord !== undefined && this.currentExteriorWallCoord !== null) {
+      if (this.blueprintEditMode &&
+        this.nextCoord !== undefined &&
+        this.currentExteriorWallCoord !== null) {
         let prevPoint;
-        if (this.drawMode === drawModes.OUTSIDEWALLS && this.exteriorWallpoints.length > 0) {
-          prevPoint = this.exteriorWallpoints[this.exteriorWallpoints.length - 1][1];
+        if (this.drawMode === drawModes.OUTSIDEWALLS && this.exteriorWalls.length > 0) {
+          prevPoint = this.exteriorWalls[this.exteriorWalls.length - 1][1];
         } else if (this.drawMode === drawModes.OUTSIDEWALLS) {
           prevPoint = this.currentExteriorWallCoord;
         } else if (this.currentInteriorWall[0] !== undefined) {
@@ -249,7 +226,7 @@ export default {
         wallPoint: [],
       };
 
-      this.exteriorWallpoints.forEach((wall) => {
+      this.exteriorWalls.forEach((wall) => {
         const line = wall;
         const distance = util.distanceToSegment(this.hoverCoord, line[0], line[1]);
 
@@ -292,8 +269,18 @@ export default {
     },
   },
   watch: {
-    editMode: function watchEditMode() {
-      if (this.editMode) {
+    blueprintEditMode: function watchEditMode() {
+      if (this.blueprintEditMode) {
+        this.previousBlueprintData = {
+          exteriorWalls: this.exteriorWalls,
+          interiorWalls: this.interiorWalls,
+        };
+        this.$store.commit(MutationTypes.BLUEPRINT_SET_DATA, {
+          blueprintData: {
+            exteriorWalls: [],
+            interiorWalls: [],
+          },
+        });
         this.guideVisibility = true;
         enableEditHandlers(this);
       } else {
@@ -303,17 +290,30 @@ export default {
     },
   },
   methods: {
-    save() {
-      this.editMode = false;
-      this.instructionMessage = 'It\'s gone.';
+    cancel() {
+      this.$store.commit(MutationTypes.BLUEPRINT_SET_DATA, {
+        blueprintData: {
+          exteriorWalls: this.previousBlueprintData.exteriorWalls,
+          interiorWalls: this.previousBlueprintData.interiorWalls,
+        },
+      });
       this.$store.commit(MutationTypes.TOGGLE_BLUEPRINT_EDIT_MODE, { newValue: false });
+    },
+    save() {
+      this.instructionMessage = 'It\'s gone.';
+      this.previousBlueprintData = {
+        exteriorWalls: this.exteriorWalls,
+        interiorWalls: this.interiorWalls,
+      };
+      this.$store.commit(MutationTypes.TOGGLE_BLUEPRINT_EDIT_MODE, { newValue: false });
+      this.$store.dispatch('syncBlueprint');
     },
     endExteriorWalls(e) {
       const lastWallpoint = this.currentExteriorWallCoord;
       // Compensate last point for 90 degree angle
-      const alignedLastPoint = util.alignPoint(lastWallpoint, this.exteriorWallpoints[0][0]);
-      // this.exteriorWallpoints.push(alignedLastPoint);
-      this.exteriorWallpoints.push([alignedLastPoint, this.exteriorWallpoints[0][0]]);
+      const alignedLastPoint = util.alignPoint(lastWallpoint, this.exteriorWalls[0][0]);
+      // this.exteriorWalls.push(alignedLastPoint);
+      this.exteriorWalls.push([alignedLastPoint, this.exteriorWalls[0][0]]);
 
       this.drawMode = drawModes.INSIDEWALLS1;
       this.ready = true;
@@ -321,6 +321,29 @@ export default {
       e.stopPropagation(); // Prevent bubbling to svg and adding another point of external wall
     },
     clearInteriorWalls() {
+    },
+    canvasClicked() {
+      if (this.drawMode === drawModes.OUTSIDEWALLS) {
+        this.instructionMessage = 'Now keep drawing the wall. Connect to first corner when ready';
+        const prevCoord = this.currentExteriorWallCoord;
+        if (prevCoord == null) {
+          this.currentExteriorWallCoord = this.nextCoord;
+        } else {
+          this.currentExteriorWallCoord = this.nextCoord;
+          this.exteriorWalls.push([prevCoord, this.nextCoord]);
+        }
+      } else if (this.drawMode === drawModes.INSIDEWALLS1) {
+        this.instructionMessage = 'Now select the end for the interior wall';
+        this.currentInteriorWall = [this.nextCoord];
+        this.currentInteriorWallOrigin = this.nearestWall.line;
+        this.drawMode = drawModes.INSIDEWALLS2;
+      } else if (this.drawMode === drawModes.INSIDEWALLS2) {
+        this.instructionMessage = 'Add an interior wall by selecting a point or press save';
+        this.currentInteriorWall[1] = this.nextCoord;
+        this.interiorWalls.push(this.currentInteriorWall);
+        this.currentInteriorWall = [];
+        this.drawMode = drawModes.INSIDEWALLS1;
+      }
     },
   },
   mounted() {

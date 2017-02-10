@@ -63,6 +63,7 @@ export default {
 .messagearea {
   height: 100%;
   outline: solid 1px white;
+  padding-top: 20px;
 }
 .messagelist {
   display: flex;

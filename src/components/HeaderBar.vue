@@ -2,7 +2,7 @@
   <div class="header-bar">
     <div class="title">
       <h1>Suinula ranch</h1>
-      <a href="/api/v1/logout">Logout</a>
+      <a class="logoutlink" href="/api/v1/logout">Logout</a>
     </div>
     <div class="forecast">
       <WeatherIcon
@@ -43,6 +43,7 @@ export default {
 }
 h1 {
   margin: 0;
+  margin-bottom: 10px;
   padding-top: 20px;
 }
 .title {
@@ -51,5 +52,17 @@ h1 {
 .forecast {
   flex: 4;
   display: flex;
+}
+.logoutlink {
+  color: white;
+  text-decoration: none;
+  border: 2px solid white;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+a:visited {
+  color: white;
+  text-decoration: none;
 }
 </style>

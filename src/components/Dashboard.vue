@@ -73,7 +73,7 @@
 
     </div>
     -->
-    <button v-on:click="blueprintEditClicked">Redraw blueprint</button>
+    <elButton size="small" v-on:click="blueprintEditClicked">Redraw blueprint</elButton>
     <Blueprint></Blueprint>
     <Sensor v-show="!blueprintEditMode" v-for="(sensor, index) in sensors"
       :index="index"
@@ -87,6 +87,8 @@
 <script>
 
 import { mapGetters } from 'vuex';
+import { Button } from 'element-ui';
+
 
 import Blueprint from './Blueprint';
 import Sensor from './Sensor';
@@ -97,6 +99,7 @@ export default {
   components: {
     Sensor,
     Blueprint,
+    elButton: Button,
   },
   props: {
     sensors: {

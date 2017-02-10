@@ -1,5 +1,5 @@
 <template>
-  <div v-on:drag="onDrag" :style="position" class="sensor">
+  <div v-on:drag="onDrag" draggable :style="position" class="sensor">
     <div class="sensor-name">{{ name }}</div>
     {{ value }}&nbsp;{{ unit }}
   </div>
@@ -56,18 +56,6 @@ export default {
     position() {
       return `left: ${this.xCoord}px; top: ${this.yCoord}px;`;
     },
-  },
-  created() {
-    /*
-    const updateValue = () => {
-      this.$http.get(`${document.location.origin}/api/v1/measurements/latest/${this.id}`)
-        .then((measurementResponse) => {
-          this.value = measurementResponse.body.value;
-        });
-    };
-    updateValue();
-    */
-    // setInterval(updateValue, 1000);
   },
 };
 </script>

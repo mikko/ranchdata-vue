@@ -10,6 +10,8 @@
 </template>
 
 <script>
+import moment from 'moment';
+
 export default {
   name: 'message',
   props: {
@@ -33,7 +35,7 @@ export default {
   },
   computed: {
     timeString() {
-      return this.time.substr(0, 16);
+      return moment(this.time).format('D.M.Y');
     },
   },
 };
@@ -56,6 +58,7 @@ export default {
 .message-row {
   background-color: gray;
   display: flex;
+  margin: 5px;
 }
 
 .note {

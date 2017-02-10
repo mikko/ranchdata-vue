@@ -1,15 +1,14 @@
 <template>
   <div class="forecast__item">
-    <div>{{ time }}</div>
     <i :class="iconClass"></i>
-    <!--
-    <div>{{ weathersymbol3  }}</div>
-    -->
     <span class="temperature">{{ temperature.toFixed(0) }}°C</span>
+    <div class="timestamp">{{ timeString }}</div>
   </div>
 </template>
 
 <script>
+import moment from 'moment';
+
 const symbolToClass = (symbol) => {
   const symbolId = parseInt(symbol, 10);
   switch (symbolId) {
@@ -68,6 +67,9 @@ export default {
     iconClass() {
       return `wi ${symbolToClass(this.weathersymbol3)}`;
     },
+    timeString() {
+      return moment(this.time).format('HH:MM');
+    },
   },
 };
 </script>
@@ -87,13 +89,17 @@ h1, h2 {
   margin: 10px;
   opacity: 0.8;
 }
+.timestamp {
+  margin-top: 5px;
+}
 i {
-  margin-bottom: 1%;
-  margin-top: 2%;
+  margin-bottom: 10px;
+  font-size: 20px;
   color: #FFFFFF;
   width: 100%;
 }
 .temperature {
   font-weight: bold;
+  color: lightblue;
 }
 </style>

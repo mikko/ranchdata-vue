@@ -1,8 +1,8 @@
 <template>
   <div class="tool-wrapper">
-    <button :disabled="!ready" v-on:click="save">Save</button>
-    <button v-on:click="cancel">Cancel</button>
-    <button :disabled="interiorWalls.length < 1" v-on:click="clearInteriorWalls">Clear interior walls</button>
+    <elButton v-show="this.blueprintEditMode" size="small" :disabled="!ready" v-on:click="save">Save</elButton>
+    <elButton v-show="this.blueprintEditMode" size="small" v-on:click="cancel">Cancel</elButton>
+    <elButton v-show="this.blueprintEditMode" size="small" :disabled="interiorWalls.length < 1" v-on:click="clearInteriorWalls">Clear interior walls</elButton>
 
     <svg class="canvas" ref="canvas" v-on:click="canvasClicked">
       <g class="walls">
@@ -27,6 +27,7 @@
 <script>
 import * as d3 from 'd3';
 import { mapGetters } from 'vuex';
+import { Button } from 'element-ui';
 import util from '../util/blueprintUtil';
 import * as MutationTypes from '../store/mutation-types';
 
@@ -55,6 +56,9 @@ const enableEditHandlers = (vueThis) => {
 
 export default {
   name: 'blueprint',
+  components: {
+    elButton: Button,
+  },
   data() {
     return {
       canvasWidth: 0,

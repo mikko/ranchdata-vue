@@ -7,27 +7,12 @@ import mutations from './mutations';
 Vue.use(Vuex);
 
 const state = {
+  isLoggedIn: false,
   sensors: {},
-  messages: [
-    {
-      type: 'info',
-      entry: 'Roska-auto',
-      time: '2016-10-10 15:00:00.000000 +03:00',
-      sensor: 2,
-    },
-    {
-      type: 'info',
-      entry: 'IV-kone suodatin',
-      time: '2016-10-10 15:00:00.000000 +03:00',
-      sensor: 2,
-    },
-    {
-      type: 'info',
-      entry: 'Nuohous',
-      time: '2016-10-10 15:00:00.000000 +03:00',
-      sensor: 2,
-    },
-  ],
+  journal: {
+    addMode: false,
+    messages: [],
+  },
   weatherForecastItems: [
     {
       temperature: -5,

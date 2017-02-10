@@ -1,17 +1,9 @@
 <template>
   <div class="messagearea">
-    <div class="addentry">
-      <div class="col datepicker">
-        <DatePicker v-model="newEntryDate" type="date" placeholder="Päivämäärä" :picker-options="pickerOptions"></DatePicker>
-      </div>
-      <div class="col input">
-        <elInput v-model="newEntryMessage" placeholder="Merkintä"></elInput>
-      </div>
-      <div class="col button">
-        <elButton>Lisää</elButton>
-      </div>
-    </div>
-    <div class="messagelist">
+    <elButton v-if="!addMode" v-on:click="addEntryClicked">Uusi merkintä</elButton>
+    <elButton v-if="addMode" v-on:click="cancelAddEntryClicked">Peruuta</elButton>
+    <MessageEdit v-if="addMode"></MessageEdit>
+    <div v-if="!addMode" class="messagelist">
       <Message v-for="message in messages"
                :time="message.time"
                :message="message.entry"
@@ -26,6 +18,8 @@ import { DatePicker, Input, Button } from 'element-ui';
 import lang from 'element-ui/lib/locale/lang/fi';
 import locale from 'element-ui/lib/locale';
 import Message from './Message';
+import MessageEdit from './MessageEdit';
+import * as MutationTypes from '../store/mutation-types';
 
 locale.use(lang);
 
@@ -36,6 +30,7 @@ export default {
     elInput: Input,
     elButton: Button,
     Message,
+    MessageEdit,
   },
   data() {
     return {
@@ -49,7 +44,16 @@ export default {
   computed: {
     ...mapGetters({
       messages: 'allMessages',
+      addMode: 'journalAddMode',
     }),
+  },
+  methods: {
+    addEntryClicked() {
+      this.$store.commit(MutationTypes.TOGGLE_JOURNAL_ADD_MODE, { newValue: true });
+    },
+    cancelAddEntryClicked() {
+      this.$store.commit(MutationTypes.TOGGLE_JOURNAL_ADD_MODE, { newValue: false });
+    },
   },
 };
 </script>

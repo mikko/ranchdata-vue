@@ -29,4 +29,12 @@ export default {
   [types.BLUEPRINT_CLEAR_INTERIOR_WALL](state) {
     set(state.blueprint.data, 'interiorWalls', []);
   },
+
+  [types.TOGGLE_JOURNAL_ADD_MODE](state, { newValue }) {
+    set(state.journal, 'addMode', newValue);
+  },
+
+  [types.JOURNAL_SET_MESSAGES](state, { messages }) {
+    set(state.journal, 'messages', messages);
+  },
 };

@@ -1,7 +1,8 @@
 import Vue from 'vue';
+// import moment from 'moment';
 import * as types from './mutation-types';
 
-// const latency = 200;
+const pollFrequency = 10000;
 
 export const initialize = ({ commit, getters }) => {
   Vue.http.get(`${document.location.origin}/api/v1/sensors`)
@@ -27,7 +28,15 @@ export const initialize = ({ commit, getters }) => {
             });
         });
     });
-  }, 1000);
+  }, pollFrequency);
+
+  setInterval(() => {
+    Vue.http.get(`${document.location.origin}/api/v1/journalentries/relevant/5`)
+      .then((messagesResponse) => {
+        const messages = messagesResponse.body;
+        commit(types.JOURNAL_SET_MESSAGES, { messages });
+      });
+  }, pollFrequency);
 
   Vue.http.get(`${document.location.origin}/api/v1/views`)
     .then((viewsResponse) => {

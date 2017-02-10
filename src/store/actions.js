@@ -1,55 +1,22 @@
 import Vue from 'vue';
-// import moment from 'moment';
-import * as types from './mutation-types';
+import * as actionUtil from '../util/actionUtil';
 
-const pollFrequency = 10000;
+const pollFrequency = 60000;
 
 export const initialize = ({ commit, getters }) => {
-  Vue.http.get(`${document.location.origin}/api/v1/sensors`)
-    .then((sensorResponse) => {
-      const sensors = sensorResponse.body;
-      sensors.forEach((sensor) => {
-        const newSensor = sensor;
-        if (sensor.name === '') {
-          newSensor.name = sensor.serial;
-        }
-        commit(types.ADD_SENSOR, { sensor: newSensor });
-      });
-    });
+  actionUtil.getSensors({ commit, getters })
+    .then(() => actionUtil.refreshLatestMeasurements({ commit, getters }));
 
   setInterval(() => {
-    getters.sensors.forEach((sensor) => {
-      Vue.http.get(`${document.location.origin}/api/v1/measurements/latest/${sensor.id}`)
-        .then((measurementResponse) => {
-          const value = measurementResponse.body.value;
-          commit(types.UPDATE_SENSOR_LATEST_VALUE,
-            { sensorId: sensor.id,
-              latestValue: value,
-            });
-        });
-    });
+    actionUtil.refreshLatestMeasurements({ commit, getters });
   }, pollFrequency);
 
+  actionUtil.refreshRelevantJournalEntries({ commit });
   setInterval(() => {
-    Vue.http.get(`${document.location.origin}/api/v1/journalentries/relevant/5`)
-      .then((messagesResponse) => {
-        const messages = messagesResponse.body;
-        commit(types.JOURNAL_SET_MESSAGES, { messages });
-      });
+    actionUtil.refreshRelevantJournalEntries({ commit });
   }, pollFrequency);
 
-  Vue.http.get(`${document.location.origin}/api/v1/views`)
-    .then((viewsResponse) => {
-      const view = viewsResponse.body;
-      console.log(view);
-      if (view !== undefined &&
-        view.viewdata !== undefined &&
-        view.viewdata.exteriorWalls !== undefined &&
-        view.viewdata.interiorWalls !== undefined) {
-        const blueprintData = view.viewdata;
-        commit(types.BLUEPRINT_SET_DATA, { blueprintData });
-      }
-    });
+  actionUtil.refreshViews({ commit });
 };
 
 export const syncBlueprint = ({ getters }) => {
@@ -58,8 +25,4 @@ export const syncBlueprint = ({ getters }) => {
     title: 'todo',
     viewData: currentBlueprint,
   });
-};
-
-export const saveBlueprint = () => {
-
 };

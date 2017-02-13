@@ -5,7 +5,10 @@ const pollFrequency = 60000;
 
 export const initialize = ({ commit, getters }) => {
   actionUtil.getSensors({ commit, getters })
-    .then(() => actionUtil.refreshLatestMeasurements({ commit, getters }));
+    .then(() => {
+      actionUtil.refreshLatestMeasurements({ commit, getters });
+      actionUtil.refreshViews({ commit, getters });
+    });
 
   setInterval(() => {
     actionUtil.refreshLatestMeasurements({ commit, getters });
@@ -15,8 +18,6 @@ export const initialize = ({ commit, getters }) => {
   setInterval(() => {
     actionUtil.refreshRelevantJournalEntries({ commit });
   }, pollFrequency);
-
-  actionUtil.refreshViews({ commit });
 };
 
 export const syncBlueprint = ({ getters }) => {

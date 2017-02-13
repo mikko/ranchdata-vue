@@ -59,23 +59,7 @@ const state = {
       exteriorWalls: [],
       interiorWalls: [],
     },
-    sensors: {
-      1: {
-        visible: true,
-        x: 200,
-        y: 200,
-      },
-      2: {
-        visible: true,
-        x: 400,
-        y: 400,
-      },
-      4: {
-        visible: true,
-        x: 400,
-        y: 600,
-      },
-    },
+    sensors: {},
   },
 };
 

@@ -3,6 +3,7 @@
 import Vue from 'vue';
 import VueResource from 'vue-resource';
 import VueRouter from 'vue-router';
+import 'font-awesome-webpack';
 
 import App from './App';
 import LandingPage from './Landing';

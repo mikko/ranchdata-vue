@@ -30,7 +30,7 @@ export const refreshRelevantJournalEntries = ({ commit }) => {
     .then(messages => commit(types.JOURNAL_SET_MESSAGES, { messages }));
 };
 
-export const refreshViews = ({ commit }) => {
+export const refreshViews = ({ commit, getters }) => {
   // Currently only single view is supported
   Api.getViews()
     .then((view) => {
@@ -44,6 +44,15 @@ export const refreshViews = ({ commit }) => {
         };
         commit(types.BLUEPRINT_SET_DATA, { blueprintData });
         const sensorData = view.viewdata.sensors;
+        getters.sensors.forEach((sensor, index) => {
+          if (sensorData[sensor.id] === undefined) {
+            sensorData[sensor.id] = {
+              visible: true,
+              x: 100,
+              y: 100 + (index * 50),
+            };
+          }
+        });
         commit(types.VIEW_SET_SENSOR_DATA, { sensorData });
       }
     });

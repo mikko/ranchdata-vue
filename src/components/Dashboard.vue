@@ -2,7 +2,7 @@
   <div class="dashboard">
     <div class="dash-buttons">
       <i v-if="!viewEditMode" v-on:click="viewEditClicked" class="viewEdit fa fa-cog fa-fw fa-2x"></i>
-      <i v-if="viewEditMode" v-on:click="blueprintEditClicked" class="blueprintEdit fa fa-pencil-square-o fa-fw fa-2x"></i>
+      <i v-if="viewEditMode && !blueprintDrawMode" v-on:click="blueprintEditClicked" class="blueprintEdit fa fa-pencil-square-o fa-fw fa-2x"></i>
       <i v-if="viewEditMode" v-on:click="cancel" class="cancel fa fa-times-circle-o fa-fw fa-2x"></i>
       <i v-if="viewEditMode" v-on:click="save" class="save fa fa-check-circle-o fa-fw fa-2x"></i>
     </div>

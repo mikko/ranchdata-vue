@@ -36,10 +36,15 @@ export const refreshViews = ({ commit }) => {
     .then((view) => {
       if (view !== undefined &&
         view.viewdata !== undefined &&
-        view.viewdata.exteriorWalls !== undefined &&
-        view.viewdata.interiorWalls !== undefined) {
-        const blueprintData = view.viewdata;
+        view.viewdata.blueprint.exteriorWalls !== undefined &&
+        view.viewdata.blueprint.interiorWalls !== undefined) {
+        const blueprintData = {
+          exteriorWalls: view.viewdata.blueprint.exteriorWalls,
+          interiorWalls: view.viewdata.blueprint.interiorWalls,
+        };
         commit(types.BLUEPRINT_SET_DATA, { blueprintData });
+        const sensorData = view.viewdata.sensors;
+        commit(types.VIEW_SET_SENSOR_DATA, { sensorData });
       }
     });
 };

@@ -4,12 +4,14 @@ export const latestValue = state => Object.keys(state.sensors).map(s => s.latest
 
 export const weatherForecastItems = state => state.weatherForecastItems;
 
-
 // Blueprint
-export const blueprintEditMode = state => state.blueprint.editMode;
-export const blueprint = state => state.blueprint.data;
-export const exteriorWalls = state => state.blueprint.data.exteriorWalls;
-export const interiorWalls = state => state.blueprint.data.interiorWalls;
+export const viewEditMode = state => state.view.internal.editMode;
+export const blueprintDrawMode = state => state.view.internal.drawMode;
+export const exteriorWalls = state => state.view.blueprint.exteriorWalls;
+export const interiorWalls = state => state.view.blueprint.interiorWalls;
+
+export const view = state => state.view;
+export const viewSensors = state => state.view.sensors;
 
 // Journal
 export const journalAddMode = state => state.journal.addMode;

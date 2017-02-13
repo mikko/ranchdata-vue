@@ -50,11 +50,31 @@ const state = {
       weathersymbol3: 63,
     },
   ],
-  blueprint: {
-    editMode: false,
-    data: {
+  view: {
+    internal: {
+      editMode: false,
+      drawMode: false,
+    },
+    blueprint: {
       exteriorWalls: [],
       interiorWalls: [],
+    },
+    sensors: {
+      1: {
+        visible: true,
+        x: 200,
+        y: 200,
+      },
+      2: {
+        visible: true,
+        x: 400,
+        y: 400,
+      },
+      4: {
+        visible: true,
+        x: 400,
+        y: 600,
+      },
     },
   },
 };

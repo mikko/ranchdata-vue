@@ -20,9 +20,9 @@ export const initialize = ({ commit, getters }) => {
 };
 
 export const syncBlueprint = ({ getters }) => {
-  const currentBlueprint = getters.blueprint;
+  const currentView = getters.view;
   Vue.http.post(`${document.location.origin}/api/v1/view`, {
     title: 'todo',
-    viewData: currentBlueprint,
+    viewData: currentView,
   });
 };

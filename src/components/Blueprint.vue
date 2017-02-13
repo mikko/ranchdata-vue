@@ -1,9 +1,5 @@
 <template>
   <div class="tool-wrapper">
-    <elButton v-show="this.blueprintEditMode" size="small" :disabled="!ready" v-on:click="save">Save</elButton>
-    <elButton v-show="this.blueprintEditMode" size="small" v-on:click="cancel">Cancel</elButton>
-    <elButton v-show="this.blueprintEditMode" size="small" :disabled="interiorWalls.length < 1" v-on:click="clearInteriorWalls">Clear interior walls</elButton>
-
     <svg class="canvas" ref="canvas" v-on:click="canvasClicked">
       <g class="walls">
         <path class="exteriorWall" :d="exteriorWallsPath"></path>
@@ -20,7 +16,6 @@
         <circle v-on:click="endExteriorWalls" v-if="!ready" class="exteriorBeginGuide" :cx="exteriorBeginGuide.x" :cy="exteriorBeginGuide.y" r="10"></circle>
       </g>
     </svg>
-    {{ instructionMessage }}
   </div>
 </template>
 
@@ -80,7 +75,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'blueprintEditMode',
+      'blueprintDrawMode',
       'exteriorWalls',
       'interiorWalls',
     ]),
@@ -183,7 +178,7 @@ export default {
         };
       })
       .filter(point => point !== null);
-      if (this.blueprintEditMode &&
+      if (this.blueprintDrawMode &&
         this.nextCoord !== undefined &&
         this.currentExteriorWallCoord !== null) {
         let prevPoint;
@@ -273,8 +268,8 @@ export default {
     },
   },
   watch: {
-    blueprintEditMode: function watchEditMode() {
-      if (this.blueprintEditMode) {
+    blueprintDrawMode: function watchEditMode() {
+      if (this.blueprintDrawMode) {
         this.previousBlueprintData = {
           exteriorWalls: this.exteriorWalls,
           interiorWalls: this.interiorWalls,

@@ -1,8 +1,21 @@
 <template>
   <div class="header-bar">
-    <div class="title">
+    <div class="navigation">
       <h1>Suinula ranch</h1>
+      <!--
       <a class="logoutlink" href="/api/v1/logout">Logout</a>
+      -->
+      <div class="page-menu">
+        <div class="page-icon">
+          <i class="fa fa-tachometer fa-fw fa-2x"></i>
+        </div>
+        <div class="page-icon">
+          <i class="fa fa-bar-chart fa-fw  fa-2x"></i>
+        </div>
+        <div class="page-icon">
+          <i class="fa fa-book fa-fw  fa-2x"></i>
+        </div>
+      </div>
     </div>
     <div class="forecast">
       <WeatherIcon
@@ -43,12 +56,25 @@ export default {
 }
 h1 {
   margin: 0;
-  margin-bottom: 10px;
-  padding-top: 20px;
-}
-.title {
+  padding-top: 10px;
+  font-size: 20px;
   flex: 1;
 }
+.navigation {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.page-menu {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+}
+
+.page-icon {
+  flex: 1;
+}
+
 .forecast {
   flex: 4;
   display: flex;
@@ -64,5 +90,8 @@ h1 {
 a:visited {
   color: white;
   text-decoration: none;
+}
+.fa {
+  cursor: pointer;
 }
 </style>

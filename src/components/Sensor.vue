@@ -92,9 +92,15 @@ export default {
       };
     },
     storedVisibility() {
+      if (this.viewSensors[this.id] === undefined) {
+        return true;
+      }
       return this.viewSensors[this.id].visible;
     },
     storedPosition() {
+      if (this.viewSensors[this.id] === undefined) {
+        return 'left: 100px; top: 100px;';
+      }
       const position = this.viewSensors[this.id];
       return `left: ${position.x}px; top: ${position.y}px;`;
     },

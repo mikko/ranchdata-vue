@@ -3,7 +3,7 @@ import Vue from 'vue';
 export const getSensors = () => Vue.http.get(`${document.location.origin}/api/v1/sensors`)
     .then(sensorResponse => Promise.resolve(sensorResponse.body));
 
-export const getLatestMeasurements = sensorId => Vue.http.get(`${document.location.origin}/api/v1/measurements/latest/${sensorId}`)
+export const getLatestMeasurements = sensor => Vue.http.get(`${document.location.origin}/api/v1/sensor/${sensor}/latest`)
   .then(measurementResponse => Promise.resolve(measurementResponse.body.value));
 
 export const getRelevantJournalEntries = count => Vue.http.get(`${document.location.origin}/api/v1/journalentries/relevant/${count}`)

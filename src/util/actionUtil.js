@@ -15,7 +15,7 @@ export const getSensors = ({ commit }) => Api.getSensors()
 export const refreshLatestMeasurements = ({ commit, getters }) => {
   console.log('Refreshing latest measurements');
   getters.sensors.forEach((sensor) => {
-    Api.getLatestMeasurements(sensor.id)
+    Api.getLatestMeasurements(sensor.serial)
       .then(value => commit(types.UPDATE_SENSOR_LATEST_VALUE,
         {
           sensorId: sensor.id,

@@ -6,13 +6,9 @@
       </div>
     </div>
     <div class="layout-row">
-      <!--
-      <div class="layout-column column-sidebar">
-        <ConfigSidebar></ConfigSidebar>
-      </div>
-      -->
       <div class="layout-column column-dashboard">
-        <Dashboard :sensors="sensors"></Dashboard>
+        <router-view/>
+        <!--<Dashboard :sensors="sensors"></Dashboard>-->
       </div>
       <div class="layout-column column-messages">
         <MessageArea></MessageArea>
@@ -22,16 +18,12 @@
 </template>
 
 <script>
-import ConfigSidebar from './components/ConfigSidebar';
-import Dashboard from './components/Dashboard';
-import HeaderBar from './components/HeaderBar';
-import MessageArea from './components/MessageArea';
+import HeaderBar from './components/header/HeaderBar';
+import MessageArea from './components/messageArea/MessageArea';
 
 export default {
   name: 'app',
   components: {
-    ConfigSidebar,
-    Dashboard,
     HeaderBar,
     MessageArea,
   },

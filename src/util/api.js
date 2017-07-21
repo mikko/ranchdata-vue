@@ -11,3 +11,9 @@ export const getRelevantJournalEntries = count => Vue.http.get(`${document.locat
 
 export const getViews = () => Vue.http.get(`${document.location.origin}/api/v1/views`)
     .then(viewsResponse => Promise.resolve(viewsResponse.body));
+
+export const getMeasurementSeries = (sensor, begin, end) => {
+  const queryParams = `start=${begin}&end=${end}`;
+  return Vue.http.get(`${document.location.origin}/api/v1/sensor/${sensor}/series?${queryParams}`)
+    .then(measurementResponse => Promise.resolve(measurementResponse.body));
+};

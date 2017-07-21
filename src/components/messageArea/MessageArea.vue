@@ -19,7 +19,7 @@ import lang from 'element-ui/lib/locale/lang/fi';
 import locale from 'element-ui/lib/locale';
 import Message from './Message';
 import MessageEdit from './MessageEdit';
-import * as MutationTypes from '../store/mutation-types';
+import * as MutationTypes from '../../store/mutation-types';
 
 locale.use(lang);
 

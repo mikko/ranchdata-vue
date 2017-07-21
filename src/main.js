@@ -7,6 +7,8 @@ import 'font-awesome-webpack';
 
 import App from './App';
 import LandingPage from './Landing';
+import Dashboard from './components/dashboard/Dashboard';
+import Analysis from './components/analysis/Analysis';
 import store from './store/store';
 import '../static/css/weather-icons.css';
 
@@ -17,6 +19,20 @@ const routes = [
   {
     path: '/app',
     component: App,
+    children: [
+      {
+        path: '',
+        component: Dashboard,
+      },
+      {
+        path: 'dashboard',
+        component: Dashboard,
+      },
+      {
+        path: 'analysis',
+        component: Analysis,
+      },
+    ],
   },
   {
     path: '/',

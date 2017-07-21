@@ -24,7 +24,7 @@ import { Button } from 'element-ui';
 
 import Blueprint from './Blueprint';
 import Sensor from './Sensor';
-import * as MutationTypes from '../store/mutation-types';
+import * as MutationTypes from '../../store/mutation-types';
 
 export default {
   name: 'dashboard',
@@ -38,12 +38,6 @@ export default {
       elementOffset: { x: 0, y: 0 },
       previousView: null,
     };
-  },
-  props: {
-    sensors: {
-      type: Array,
-      default: () => [],
-    },
   },
   computed: {
     ...mapGetters([

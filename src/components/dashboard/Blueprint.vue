@@ -23,8 +23,8 @@
 import * as d3 from 'd3';
 import { mapGetters } from 'vuex';
 import { Button } from 'element-ui';
-import util from '../util/blueprintUtil';
-import * as MutationTypes from '../store/mutation-types';
+import util from '../../util/blueprintUtil';
+import * as MutationTypes from '../../store/mutation-types';
 
 const drawModes = {
   OUTSIDEWALLS: 'outsidewalls', // Drawing the closed loop of walls

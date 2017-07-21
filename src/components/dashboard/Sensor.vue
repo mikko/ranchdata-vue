@@ -14,7 +14,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import * as MutationTypes from '../store/mutation-types';
+import * as MutationTypes from '../../store/mutation-types';
 
 export default {
   name: 'sensor',

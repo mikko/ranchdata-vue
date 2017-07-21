@@ -39,7 +39,7 @@ export default {
       };
       this.$http.post(`${document.location.origin}/api/v1/login`, credentials)
         .then(() => {
-          this.$router.replace('/app');
+          this.$router.replace('/app/dashboard');
         })
         .catch(() => {
           this.message = 'Invalid credentials';
@@ -50,7 +50,7 @@ export default {
     this.$http.get(`${document.location.origin}/api/v1/userDetails`)
       .then((res) => {
         if (res.body.username !== undefined) {
-          this.$router.replace('/app');
+          this.$router.replace('/app/dashboard');
         }
       });
   },

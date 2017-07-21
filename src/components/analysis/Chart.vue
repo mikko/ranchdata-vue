@@ -35,19 +35,13 @@ require('c3/c3.css');
 // import * as MutationTypes from '../../store/mutation-types';
 
 const refreshData = function refreshData() {
-  console.log(this.selectedSensors, this.selectedTimeframe);
-
   const [amount, unit] = this.currentTimeframe;
   const now = new Moment();
   const begin = now.clone().subtract(amount, unit);
-  console.log('sensor', this.selectedSensors);
-  console.log(now.toISOString(), begin.toISOString());
   const sensor = this.selectedSensors[0];
   getMeasurementSeries(sensor, begin.toISOString(), now.toISOString())
     .then((res) => {
-      console.log(res);
       this.dataPoints = res;
-      console.log(this.dataPoints.length);
       this.$chart.load({
         json: this.dataPoints,
         keys: {
@@ -94,7 +88,6 @@ export default {
       'sensors',
     ]),
     sensorData() {
-      console.log('Selected sensors changed');
       return this.selectedSensors;
     },
     currentTimeframe() {

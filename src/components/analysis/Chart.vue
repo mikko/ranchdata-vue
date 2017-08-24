@@ -17,7 +17,46 @@
           :value="tf.key">
         </elOption>
       </elSelect>
+      <elDatePicker
+        v-if="selectedTimeframe === 'day'"
+        v-model="selectedDate"
+        type="date"
+        key="datepicker-date"
+        placeholder="Pick a date"
+        :picker-options="pickerOptions">
+      </elDatePicker>
+      <elDatePicker
+        v-if="selectedTimeframe === 'week'"
+        v-model="selectedWeek"
+        type="week"
+        key="datepicker-week"
+        format="Week WW"
+        placeholder="Pick a week"
+        :picker-options="pickerOptions">
+      </elDatePicker>
+      <elDatePicker
+        v-if="selectedTimeframe === 'month'"
+        v-model="selectedMonth"
+        type="month"
+        key="datepicker-month"
+        placeholder="Pick a month"
+        :picker-options="pickerOptions">
+      </elDatePicker>
+      <elDatePicker
+        v-if="selectedTimeframe === 'year'"
+        v-model="selectedYear"
+        type="year"
+        key="datepicker-year"
+        placeholder="Pick a year"
+        :picker-options="pickerOptions">
+      </elDatePicker>
+
     </div>
+    selectedTimeframe: {{ selectedTimeframe }}<br/>
+    selectedDate: {{ selectedDate }} <br/>
+    selectedWeek: {{ selectedWeek }} <br/>
+    selectedMonth: {{ selectedMonth }} <br/>
+    selectedYear: {{ selectedYear }} <br/>
     <div ref="chart"></div>
   </div>
 </template>
@@ -26,7 +65,7 @@
 
 import { mapGetters } from 'vuex';
 import c3 from 'c3';
-import { Select, Option } from 'element-ui';
+import { DatePicker, Select, Option } from 'element-ui';
 import Moment from 'moment';
 import { getMeasurementSeries } from '../../util/api';
 
@@ -57,12 +96,20 @@ export default {
   components: {
     elSelect: Select,
     elOption: Option,
+    elDatePicker: DatePicker,
   },
   data() {
     return {
       selectedSensors: [],
       selectedTimeframe: 'week',
+      selectedDate: '',
+      selectedWeek: '',
+      selectedMonth: '',
+      selectedYear: '',
       dataPoints: [],
+      pickerOptions: {
+        firstDayOfWeek: 1,
+      },
       availableTimeframes: [
         {
           key: 'day',

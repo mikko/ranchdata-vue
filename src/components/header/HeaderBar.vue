@@ -6,13 +6,13 @@
       -->
       <div class="page-menu">
         <div class="page-icon selected">
-          <i class="fa fa-tachometer fa-fw fa-2x"></i>
+          <router-link to="dashboard" tag="i" class="fa fa-tachometer fa-fw fa-2x"></router-link>
         </div>
         <div class="page-icon">
-          <i class="fa fa-bar-chart fa-fw  fa-2x"></i>
+          <router-link to="analysis" tag="i" class="fa fa-bar-chart fa-fw fa-2x"></router-link>
         </div>
         <div class="page-icon">
-          <i class="fa fa-book fa-fw  fa-2x"></i>
+          <router-link to="journal" tag="i" class="fa fa-book fa-fw fa-2x"></router-link>
         </div>
       </div>
     </div>

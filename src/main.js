@@ -9,6 +9,7 @@ import App from './App';
 import LandingPage from './Landing';
 import Dashboard from './components/dashboard/Dashboard';
 import Analysis from './components/analysis/Analysis';
+import Journal from './components/journal/Journal';
 import store from './store/store';
 import '../static/css/weather-icons.css';
 
@@ -31,6 +32,10 @@ const routes = [
       {
         path: 'analysis',
         component: Analysis,
+      },
+      {
+        path: 'journal',
+        component: Journal,
       },
     ],
   },

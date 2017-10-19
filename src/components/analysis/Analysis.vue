@@ -105,5 +105,13 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+  h1 {
+    height: 5%;
+    margin: 0;
+    margin-top: 3%;
+    margin-bottom: 2%;
+  }
+  .analysis {
+    height: 90%;
+  }
 </style>

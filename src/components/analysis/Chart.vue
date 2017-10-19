@@ -52,12 +52,7 @@
       </elDatePicker>
 
     </div>
-    selectedTimeframe: {{ selectedTimeframe }}<br/>
-    selectedDate: {{ selectedDate }} <br/>
-    selectedWeek: {{ selectedWeek }} <br/>
-    selectedMonth: {{ selectedMonth }} <br/>
-    selectedYear: {{ selectedYear }} <br/>
-    <div ref="chart"></div>
+    <div ref="chart" class="chart-container"></div>
   </div>
 </template>
 
@@ -77,17 +72,26 @@ const refreshData = function refreshData() {
   const [amount, unit] = this.currentTimeframe;
   const now = new Moment();
   const begin = now.clone().subtract(amount, unit);
-  const sensor = this.selectedSensors[0];
-  getMeasurementSeries(sensor, begin.toISOString(), now.toISOString())
-    .then((res) => {
-      this.dataPoints = res;
-      this.$chart.load({
-        json: this.dataPoints,
-        keys: {
-          x: 'measurement_time',
-          value: ['value'],
-        },
-      });
+  const measurementPromises = this.selectedSensors.map(s =>
+    getMeasurementSeries(s, begin.toISOString(), now.toISOString()));
+
+  Promise.all(measurementPromises)
+    .then((sensorDatas) => {
+      const dataPoints = sensorDatas.map(s => s.map(item => item.value));
+      const timeStamps = sensorDatas.map(s => s.map(item => item.measurement_time));
+      const xLabels = sensorDatas.map(s => `x_${s[0].serial}`);
+
+      const xs = {};
+      sensorDatas.forEach((s, i) => (xs[s[0].serial] = xLabels[i]));
+
+      const chartData = {
+        columns: [
+          ...sensorDatas.map((s, i) => [s[0].serial, ...dataPoints[i]]),
+          ...xLabels.map((x, i) => [x, ...timeStamps[i]]),
+        ],
+        xs,
+      };
+      this.$chart.load(chartData);
     });
 };
 
@@ -162,13 +166,13 @@ export default {
     this.$chart = c3.generate({
       bindto: this.$refs.chart,
       data: {
-        x: 'x',
+        // x: 'x',
         xFormat: '%Y-%m-%dT%H:%M:%S.%LZ',
         json: [],
-        keys: {
-          x: 'measurement_time',
-          value: ['value'],
-        },
+        // keys: {
+        //   x: 'measurement_time',
+        //   value: ['value'],
+        // },
       },
       axis: {
         x: {
@@ -185,5 +189,14 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+  .chart {
+    height: 100%;
+  }
+  .chart-container {
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    height: 90%;
+  }
+  .selections-wrapper: 10%;
 </style>

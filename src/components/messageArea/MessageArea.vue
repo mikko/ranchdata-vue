@@ -62,7 +62,6 @@ export default {
 <style scoped>
 .messagearea {
   height: 100%;
-  outline: solid 1px white;
   padding-top: 20px;
 }
 .messagelist {

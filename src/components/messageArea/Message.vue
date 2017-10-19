@@ -28,11 +28,6 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      timeString: '',
-    };
-  },
   computed: {
     timeString() {
       return moment(this.time).format('D.M.Y');
@@ -53,12 +48,17 @@ export default {
 }
 .message {
   flex: 2;
+  color: white;
+  text-align: left;
 }
 
 .message-row {
-  background-color: gray;
+  background-color: #555555;
   display: flex;
-  margin: 5px;
+  margin: 10px;
+  border: solid 1px;
+  border-radius: 4px;
+  padding: 5px;
 }
 
 .note {

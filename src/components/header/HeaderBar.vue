@@ -1,12 +1,11 @@
 <template>
   <div class="header-bar">
     <div class="navigation">
-      <h1>Suinula ranch</h1>
       <!--
       <a class="logoutlink" href="/api/v1/logout">Logout</a>
       -->
       <div class="page-menu">
-        <div class="page-icon">
+        <div class="page-icon selected">
           <i class="fa fa-tachometer fa-fw fa-2x"></i>
         </div>
         <div class="page-icon">
@@ -50,7 +49,6 @@ export default {
 .header-bar {
   width: 100%;
   height: 100%;
-  outline: solid 1px white;
   display: flex;
   flex-direction: row;
 }
@@ -69,6 +67,7 @@ h1 {
   flex: 1;
   display: flex;
   flex-direction: row;
+  margin-top: 20px;
 }
 
 .page-icon {
@@ -93,5 +92,8 @@ a:visited {
 }
 .fa {
   cursor: pointer;
+}
+.selected {
+  color: #333333;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="layout-row header">
-      <div class="layout-column">
+      <div class="layout-column header-column">
         <HeaderBar></HeaderBar>
       </div>
     </div>
@@ -54,7 +54,6 @@ html, body {
   color: #FFFFFF;
   display: flex;
   flex-direction: column;
-  background-color: #2d2d2d;
 }
 .layout-row {
   flex: 10;
@@ -63,18 +62,29 @@ html, body {
 }
 .layout-column {
   flex: 1;
+
+  margin: 30px;
+  background-color: rgba(120, 120, 120, 0.5);
 }
 .header {
   flex: 1;
   min-height: 100px;
 }
+.header-column {
+  margin-bottom: 0px;
+}
 .column-sidebar {
   flex: 1;
 }
 .column-dashboard {
-  flex: 16;
+  flex: 8;
+  margin-right: 0px;
 }
 .column-messages {
-  flex: 6;
+  flex: 2;
+}
+body {
+  background-image: url('/static/image/blurred-background.jpg');
+  background-size: cover;
 }
 </style>

@@ -1,7 +1,5 @@
 <template>
   <div id="landing">
-    <h1>KOTIKEPULI</h1>
-    <h1>( ͝° ͜ʖ͡°)</h1>
     <div class="loginform">
       <h2>
         Please login
@@ -64,6 +62,10 @@ html, body {
   margin: 0;
 }
 
+h1 {
+  color: black;
+}
+
 #landing {
   height: 100%;
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -73,16 +75,17 @@ html, body {
   color: #FFFFFF;
   display: flex;
   flex-direction: column;
-  background-color: #2d2d2d;
-}
-
-h2 {
-  margin: 50px;
 }
 
 .loginform {
   margin-top: auto;
   margin-bottom: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 40%;
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 60px;
 }
 
 .input-wrapper {

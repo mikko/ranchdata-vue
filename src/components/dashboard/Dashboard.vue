@@ -101,7 +101,6 @@ export default {
 .dashboard {
   height: 100%;
   position: relative;
-  outline: solid 1px white;
 }
 .dash-buttons {
   position: absolute;

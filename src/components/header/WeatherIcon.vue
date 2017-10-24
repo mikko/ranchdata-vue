@@ -1,8 +1,10 @@
 <template>
   <div class="forecast__item">
-    <i :class="iconClass"></i>
-    <span class="temperature">{{ temperature.toFixed(0) }}°C</span>
-    <div class="timestamp">{{ timeString }}</div>
+    <div class="row">
+      <i :class="iconClass"></i>
+      <span class="temperature">{{ temperature.toFixed(0) }}°C</span>
+    </div>
+    <div class="timestamp row">{{ timeString }}</div>
   </div>
 </template>
 
@@ -77,8 +79,16 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 div.forecast__item {
-  background-color: #444444;
-  color: #FFFFFF;
+  color: #000000;
+  display: flex;
+  flex-direction: column;
+}
+.row {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: baseline;
+  margin-top: 5px;
 }
 h1, h2 {
   font-weight: normal;
@@ -86,17 +96,15 @@ h1, h2 {
 .forecast__item {
   flex: 1;
   padding: 5px;
-  margin: 10px;
-  opacity: 0.8;
 }
 .timestamp {
   margin-top: 5px;
+  align-items: flex-end;
 }
 i {
   margin-bottom: 10px;
-  font-size: 20px;
-  color: #FFFFFF;
-  width: 100%;
+  font-size: 23px;
+  margin-right: 10px;
 }
 .temperature {
   font-weight: bold;

@@ -105,7 +105,7 @@ export default {
   data() {
     return {
       selectedSensors: [],
-      selectedTimeframe: 'week',
+      selectedTimeframe: 'day',
       selectedDate: '',
       selectedWeek: '',
       selectedMonth: '',

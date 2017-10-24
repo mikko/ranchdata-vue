@@ -24,6 +24,10 @@
         v-for="forecastItem in weatherForecastItems">
       </WeatherIcon>
     </div>
+    <div class="profile-menu">
+        <router-link to="profile" tag="i" class="fa fa-user fa-fw fa-2x"></router-link>
+
+    </div>
   </div>
 </template>
 
@@ -59,7 +63,7 @@ h1 {
   flex: 1;
 }
 .navigation {
-  flex: 1;
+  flex: 3;
   display: flex;
   flex-direction: column;
 }
@@ -69,13 +73,16 @@ h1 {
   flex-direction: row;
   margin-top: 20px;
 }
-
+.profile-menu {
+  flex: 1;
+  margin-top: 20px;
+}
 .page-icon {
   flex: 1;
 }
 
 .forecast {
-  flex: 4;
+  flex: 12;
   display: flex;
 }
 .logoutlink {
